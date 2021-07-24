@@ -21,7 +21,9 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Todo App'),
         ),
-        body: const Todo(),
+        body: const SafeArea(
+          child: Todo(),
+        ),
       ),
     );
   }

@@ -15,7 +15,7 @@ class Todo extends StatefulWidget {
 }
 
 class _Todo extends State<Todo> {
-  int index = 0;
+  int uuid = 0;
   String inputValue = '';
   String currentStatus = 'all';
   List<TodoItem> todoList = [];
@@ -28,20 +28,23 @@ class _Todo extends State<Todo> {
 
   void onAdd() {
     setState(() {
-      todoList.add(TodoItem(index, false, inputValue));
-      index++;
+      todoList.add(TodoItem(uuid, false, inputValue));
+      uuid++;
     });
   }
 
-  void onPress(isCompleted, index) {
+  void onPress(TodoItem data) {
+    final uuid = data.uuid;
+    var index = todoList.indexWhere((item) => item.uuid == uuid);
+
     setState(() {
-      todoList[index].isCompleted = !isCompleted;
+      todoList[index].isCompleted = !data.isCompleted;
     });
   }
 
-  void onRemove(index) {
+  void onRemove(uuid) {
     setState(() {
-      todoList.removeWhere((item) => item.index == index);
+      todoList.removeWhere((item) => item.uuid == uuid);
     });
   }
 
@@ -55,21 +58,20 @@ class _Todo extends State<Todo> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    List<TodoItem> todoFilteredList = [];
-
+  List<TodoItem> get todos {
     switch (currentStatus) {
       case 'todo':
-        todoFilteredList = todoList.where((item) => !item.isCompleted).toList();
-        break;
+        return todoList.where((item) => !item.isCompleted).toList();
       case 'done':
-        todoFilteredList = todoList.where((item) => item.isCompleted).toList();
-        break;
+        return todoList.where((item) => item.isCompleted).toList();
       default:
-        todoFilteredList = todoList;
-        break;
+        return todoList;
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final todoFilteredList = todos;
 
     return Container(
       margin: const EdgeInsets.all(16),
@@ -87,7 +89,7 @@ class _Todo extends State<Todo> {
               onRemove: onRemove,
             ),
           ),
-          if (todoFilteredList.isNotEmpty)
+          if (todoList.isNotEmpty)
             TodoFilter(
               currentStatus: currentStatus,
               onChangeStatus: onChangeStatus,

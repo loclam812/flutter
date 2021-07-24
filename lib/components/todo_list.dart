@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:practice/components/todo_list_item.dart';
 import 'package:practice/models/todo_item.dart';
 
 class TodoList extends StatelessWidget {
@@ -10,22 +11,8 @@ class TodoList extends StatelessWidget {
   }) : super(key: key);
 
   final List<TodoItem> listData;
-  final Function onTap;
+  final void Function(TodoItem) onTap;
   final Function onRemove;
-
-  Widget _buildRow(item, index) {
-    return ListTile(
-      leading: GestureDetector(
-        child: const Icon(Icons.remove),
-        onTap: () => onRemove(item.index),
-      ),
-      title: Text(item.text),
-      trailing: Icon(
-        item.isCompleted ? Icons.check_box : Icons.check_box_outline_blank,
-      ),
-      onTap: () => onTap(item.isCompleted, index),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +25,19 @@ class TodoList extends StatelessWidget {
     return ListView.separated(
       padding: const EdgeInsets.all(16.0),
       itemCount: listData.length,
-      itemBuilder: (BuildContext context, int i) {
-        return _buildRow(listData[i], i);
+      itemBuilder: (BuildContext context, int index) {
+        var data = listData[index];
+
+        return TodoListItem(
+          key: ValueKey('todo-item-${data.uuid}'),
+          data: data,
+          onRemove: onRemove,
+          onTap: onTap,
+        );
       },
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
+      separatorBuilder: (BuildContext context, int index) {
+        return const Divider();
+      },
     );
   }
 }

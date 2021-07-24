@@ -1,12 +1,12 @@
 class TodoItem {
-  int index;
+  int uuid;
   String text;
   bool isCompleted;
 
-  TodoItem(this.index, this.isCompleted, this.text);
+  TodoItem(this.uuid, this.isCompleted, this.text);
 
   @override
   String toString() {
-    return '{ $index, $isCompleted, $text }';
+    return '{ $uuid, $isCompleted, $text }';
   }
 }
