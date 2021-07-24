@@ -4,34 +4,14 @@ import 'package:practice/models/todo_item.dart';
 class TodoList extends StatelessWidget {
   const TodoList({
     Key? key,
-    required this.currentStatus,
     required this.listData,
     required this.onTap,
     required this.onRemove,
   }) : super(key: key);
 
-  final String currentStatus;
   final List<TodoItem> listData;
   final Function onTap;
   final Function onRemove;
-
-  listRender() {
-    List<TodoItem> listRender;
-
-    switch (currentStatus) {
-      case 'todo':
-        listRender = listData.where((item) => !item.isCompleted).toList();
-        break;
-      case 'done':
-        listRender = listData.where((item) => item.isCompleted).toList();
-        break;
-      default:
-        listRender = listData;
-        break;
-    }
-
-    return listRender;
-  }
 
   Widget _buildRow(item, index) {
     return ListTile(
@@ -49,9 +29,7 @@ class TodoList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<TodoItem> listDataRender = listRender();
-
-    if (listDataRender.isEmpty) {
+    if (listData.isEmpty) {
       return const Center(
         child: Text('No items'),
       );
@@ -59,9 +37,9 @@ class TodoList extends StatelessWidget {
 
     return ListView.separated(
       padding: const EdgeInsets.all(16.0),
-      itemCount: listDataRender.length,
+      itemCount: listData.length,
       itemBuilder: (BuildContext context, int i) {
-        return _buildRow(listDataRender[i], i);
+        return _buildRow(listData[i], i);
       },
       separatorBuilder: (BuildContext context, int index) => const Divider(),
     );

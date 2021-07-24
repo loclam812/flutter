@@ -57,6 +57,20 @@ class _Todo extends State<Todo> {
 
   @override
   Widget build(BuildContext context) {
+    List<TodoItem> todoFilteredList = [];
+
+    switch (currentStatus) {
+      case 'todo':
+        todoFilteredList = todoList.where((item) => !item.isCompleted).toList();
+        break;
+      case 'done':
+        todoFilteredList = todoList.where((item) => item.isCompleted).toList();
+        break;
+      default:
+        todoFilteredList = todoList;
+        break;
+    }
+
     return Container(
       margin: const EdgeInsets.all(16),
       child: Column(
@@ -68,13 +82,12 @@ class _Todo extends State<Todo> {
           ),
           Expanded(
             child: TodoList(
-              listData: todoList,
-              currentStatus: currentStatus,
+              listData: todoFilteredList,
               onTap: onPress,
               onRemove: onRemove,
             ),
           ),
-          if (todoList.isNotEmpty)
+          if (todoFilteredList.isNotEmpty)
             TodoFilter(
               currentStatus: currentStatus,
               onChangeStatus: onChangeStatus,
