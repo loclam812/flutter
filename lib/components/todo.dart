@@ -74,10 +74,11 @@ class _Todo extends State<Todo> {
               onRemove: onRemove,
             ),
           ),
-          TodoFilter(
-            currentStatus: currentStatus,
-            onChangeStatus: onChangeStatus,
-          )
+          if (todoList.isNotEmpty)
+            TodoFilter(
+              currentStatus: currentStatus,
+              onChangeStatus: onChangeStatus,
+            ),
         ],
       ),
     );

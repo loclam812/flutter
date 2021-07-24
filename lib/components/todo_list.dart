@@ -16,7 +16,7 @@ class TodoList extends StatelessWidget {
   final Function onRemove;
 
   listRender() {
-    var listRender = [];
+    List<TodoItem> listRender;
 
     switch (currentStatus) {
       case 'todo':
@@ -49,18 +49,19 @@ class TodoList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (listRender().isEmpty) {
-      return const Padding(
-        padding: EdgeInsets.all(16.0),
+    List<TodoItem> listDataRender = listRender();
+
+    if (listDataRender.isEmpty) {
+      return const Center(
         child: Text('No items'),
       );
     }
 
     return ListView.separated(
       padding: const EdgeInsets.all(16.0),
-      itemCount: listRender().length,
+      itemCount: listDataRender.length,
       itemBuilder: (BuildContext context, int i) {
-        return _buildRow(listRender()[i], i);
+        return _buildRow(listDataRender[i], i);
       },
       separatorBuilder: (BuildContext context, int index) => const Divider(),
     );
