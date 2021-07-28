@@ -1,11 +1,10 @@
-// ignore_for_file: file_names, avoid_print
-
 import 'package:flutter/material.dart';
 
 import 'package:practice/models/todo_item.dart';
-import 'package:practice/components/todo_action.dart';
-import 'package:practice/components/todo_list.dart';
-import 'package:practice/components/todo_filter.dart';
+import 'package:practice/components/common/base_input.dart';
+import 'package:practice/components/todo/todo_action.dart';
+import 'package:practice/components/todo/todo_list.dart';
+import 'package:practice/components/todo/todo_filter.dart';
 
 class Todo extends StatefulWidget {
   const Todo({Key? key}) : super(key: key);
@@ -17,6 +16,7 @@ class Todo extends StatefulWidget {
 class _Todo extends State<Todo> {
   int uuid = 0;
   String inputValue = '';
+  String searchValue = '';
   String currentStatus = 'all';
   List<TodoItem> todoList = [];
 
@@ -58,14 +58,32 @@ class _Todo extends State<Todo> {
     });
   }
 
+  void onSearch(value) {
+    setState(() {
+      searchValue = value.trim();
+    });
+  }
+
   List<TodoItem> get todos {
+    var isEmptySearchValue = searchValue.isEmpty;
+
+    filterSearch(text) {
+      return isEmptySearchValue || text.contains(searchValue);
+    }
+
     switch (currentStatus) {
       case 'todo':
-        return todoList.where((item) => !item.isCompleted).toList();
+        return todoList.where((item) {
+          return !item.isCompleted && filterSearch(item.text);
+        }).toList();
       case 'done':
-        return todoList.where((item) => item.isCompleted).toList();
+        return todoList.where((item) {
+          return item.isCompleted && filterSearch(item.text);
+        }).toList();
       default:
-        return todoList;
+        return todoList.where((item) {
+          return filterSearch(item.text);
+        }).toList();
     }
   }
 
@@ -82,6 +100,14 @@ class _Todo extends State<Todo> {
             onChanged: onChanged,
             onAdd: onAdd,
           ),
+          if (todoList.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: BaseInput(
+                labelText: 'Search',
+                onChanged: onSearch,
+              ),
+            ),
           Expanded(
             child: TodoList(
               listData: todoFilteredList,

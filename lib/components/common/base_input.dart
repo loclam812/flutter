@@ -14,12 +14,18 @@ class BaseInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       obscureText: type == 'password',
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         labelText: labelText,
       ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter some text';
+        }
+        return null;
+      },
       onChanged: (value) => onChanged(value),
     );
   }

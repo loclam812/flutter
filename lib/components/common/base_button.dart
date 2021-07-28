@@ -7,6 +7,7 @@ class BaseButton extends StatelessWidget {
     this.spacing = 6.0,
     this.isDisabled = false,
     this.isActive = false,
+    this.isFullWidth = false,
     required this.onClick,
   }) : super(key: key);
 
@@ -14,6 +15,7 @@ class BaseButton extends StatelessWidget {
   final double spacing;
   final bool isDisabled;
   final bool isActive;
+  final bool isFullWidth;
   final Function onClick;
 
   handleClick() {
@@ -27,9 +29,12 @@ class BaseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      child: Padding(
+      child: Container(
         padding: EdgeInsets.all(spacing),
-        child: Text(labelText),
+        width: isFullWidth ? double.infinity : null,
+        child: Center(
+          child: Text(labelText),
+        ),
       ),
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(

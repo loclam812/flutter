@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:practice/components/Todo.dart';
+import 'package:practice/screens/todo.dart';
+import 'package:practice/screens/login.dart';
+import 'package:practice/screens/second_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,14 +19,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Todo App'),
-        ),
-        body: const SafeArea(
-          child: Todo(),
-        ),
-      ),
+      initialRoute: LoginScreen.routeName,
+      routes: {
+        LoginScreen.routeName: (context) => const LoginScreen(),
+        SecondScreen.routeName: (context) => const SecondScreen(),
+        TodoScreen.routeName: (context) => const TodoScreen(),
+      },
     );
   }
 }
